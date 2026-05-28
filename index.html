@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ByteForge</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --red:#e63946;
+  --red-dark:#9b1d24;
+  --red-glow:rgba(230,57,70,0.4);
+  --bg:#0a0a0a;
+  --bg2:#111;
+  --text:#f0f0f0;
+  --muted:#888;
+  --border:rgba(255,255,255,0.08);
+}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Rajdhani',sans-serif;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* GRID BACKGROUND */
+.grid-bg{
+  position:fixed;inset:0;z-index:0;
+  background-color:#0d0d0d;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.045) 1px, transparent 1px);
+  background-size:60px 60px;
+}
+.grid-bg::after{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 90% 70% at 50% 50%, transparent 20%, rgba(0,0,0,0.88) 100%);
+}
+
+/* FLOATING SHAPES */
+.shapes{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.shape{
+  position:absolute;
+  border:1px solid rgba(230,57,70,0.1);
+  animation:floatShape 20s infinite linear;
+}
+.shape:nth-child(1){width:320px;height:320px;top:-120px;left:-120px;animation-duration:26s}
+.shape:nth-child(2){width:200px;height:200px;bottom:5%;right:-80px;animation-duration:19s;animation-delay:-9s}
+.shape:nth-child(3){width:140px;height:140px;top:40%;left:3%;animation-duration:31s;animation-delay:-16s}
+.shape:nth-child(4){width:420px;height:420px;bottom:-160px;left:35%;animation-duration:36s;animation-delay:-6s}
+@keyframes floatShape{
+  0%{transform:rotate(0deg) translateY(0)}
+  50%{transform:rotate(180deg) translateY(-30px)}
+  100%{transform:rotate(360deg) translateY(0)}
+}
+
+/* NAVBAR */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 60px;
+  background:rgba(10,10,10,0.85);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:4px;color:#fff}
+.logo span{color:var(--red)}
+.nav-links{display:flex;gap:32px;list-style:none}
+.nav-links a{
+  color:var(--muted);text-decoration:none;
+  font-size:12px;letter-spacing:2px;text-transform:uppercase;
+  font-family:'Space Mono',monospace;transition:color .3s;
+}
+.nav-links a:hover{color:var(--red)}
+.admin-btn{
+  background:transparent;border:1px solid var(--red-dark);
+  color:var(--red);padding:8px 22px;
+  font-family:'Space Mono',monospace;font-size:11px;
+  letter-spacing:2px;cursor:pointer;transition:all .3s;text-transform:uppercase;
+}
+.admin-btn:hover{background:var(--red);color:#fff;box-shadow:0 0 20px var(--red-glow)}
+
+/* MAIN */
+main{position:relative;z-index:2}
+
+/* HERO */
+#hero{
+  min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:120px 40px 80px;
+}
+.hero-tag{
+  font-family:'Space Mono',monospace;font-size:11px;
+  letter-spacing:4px;color:var(--red);text-transform:uppercase;
+  margin-bottom:24px;opacity:0;animation:fadeUp .8s .2s forwards;
+}
+.hero-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(72px,12vw,160px);
+  line-height:.9;letter-spacing:6px;margin-bottom:24px;
+  opacity:0;animation:fadeUp .8s .4s forwards;
+}
+.hero-title .red{
+  color:var(--red);display:block;
+  text-shadow:0 0 80px var(--red-glow);
+}
+.hero-sub{
+  font-size:18px;color:var(--muted);letter-spacing:1px;
+  max-width:500px;margin:0 auto 48px;line-height:1.6;
+  opacity:0;animation:fadeUp .8s .6s forwards;
+}
+.hero-buttons{
+  display:flex;gap:20px;justify-content:center;flex-wrap:wrap;
+  opacity:0;animation:fadeUp .8s .8s forwards;
+}
+.btn-primary{
+  background:var(--red);color:#fff;border:none;
+  padding:16px 48px;font-family:'Space Mono',monospace;
+  font-size:12px;letter-spacing:3px;text-transform:uppercase;
+  cursor:pointer;transition:all .3s;
+  clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%);
+}
+.btn-primary:hover{background:#ff4d5a;box-shadow:0 0 40px var(--red-glow);transform:translateY(-2px)}
+.btn-secondary{
+  background:transparent;color:var(--text);
+  border:1px solid var(--border);padding:16px 48px;
+  font-family:'Space Mono',monospace;font-size:12px;
+  letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:all .3s;
+  clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%);
+}
+.btn-secondary:hover{border-color:var(--red);color:var(--red);transform:translateY(-2px)}
+
+/* SECTIONS */
+section{padding:100px 60px;max-width:1200px;margin:0 auto}
+.section-label{
+  font-family:'Space Mono',monospace;font-size:11px;
+  letter-spacing:4px;color:var(--red);text-transform:uppercase;margin-bottom:16px;
+}
+.section-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(48px,6vw,80px);letter-spacing:4px;margin-bottom:60px;line-height:1;
+}
+
+/* CARDS */
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:900px;margin:0 auto}
+.card{
+  background:rgba(255,255,255,0.02);border:1px solid var(--border);
+  padding:48px 40px;cursor:pointer;position:relative;
+  overflow:hidden;transition:all .4s;text-align:left;
+}
+.card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--red),transparent);
+  transform:scaleX(0);transition:transform .4s;
+}
+.card:hover{
+  background:rgba(230,57,70,0.06);
+  border-color:rgba(230,57,70,0.3);
+  transform:translateY(-6px);
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+}
+.card:hover::before{transform:scaleX(1)}
+.card-icon{
+  width:52px;height:52px;border:1px solid var(--red-dark);
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:24px;font-size:22px;
+}
+.card-title{font-family:'Bebas Neue',sans-serif;font-size:34px;letter-spacing:3px;margin-bottom:12px}
+.card-desc{color:var(--muted);font-size:15px;line-height:1.7}
+.card-arrow{
+  position:absolute;bottom:24px;right:24px;
+  color:var(--red);font-size:22px;
+  opacity:0;transition:opacity .3s, transform .3s;
+}
+.card:hover .card-arrow{opacity:1;transform:translateX(5px)}
+
+/* MODAL */
+.modal-overlay{
+  position:fixed;inset:0;z-index:200;
+  background:rgba(0,0,0,0.88);
+  backdrop-filter:blur(8px);
+  display:none;align-items:center;justify-content:center;padding:20px;
+}
+.modal-overlay.active{display:flex}
+.modal{
+  background:#111;border:1px solid rgba(230,57,70,0.3);
+  width:100%;max-width:560px;padding:48px;
+  position:relative;animation:modalIn .3s ease;
+}
+@keyframes modalIn{from{opacity:0;transform:scale(.95) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.modal::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--red),transparent);
+}
+.modal-close{
+  position:absolute;top:16px;right:16px;
+  background:none;border:none;color:var(--muted);
+  font-size:20px;cursor:pointer;transition:color .2s;line-height:1;padding:4px;
+}
+.modal-close:hover{color:var(--red)}
+.modal-type{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--red);text-transform:uppercase;margin-bottom:8px}
+.modal-title{font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:3px;margin-bottom:32px}
+.form-group{margin-bottom:20px}
+.form-group label{
+  display:block;font-size:11px;letter-spacing:2px;
+  text-transform:uppercase;color:var(--muted);
+  font-family:'Space Mono',monospace;margin-bottom:8px;
+}
+.form-group input,.form-group textarea,.form-group select{
+  width:100%;background:rgba(255,255,255,0.04);
+  border:1px solid var(--border);color:#fff;
+  padding:14px 16px;font-family:'Rajdhani',sans-serif;
+  font-size:15px;outline:none;transition:border-color .3s;resize:vertical;
+}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:var(--red)}
+.form-group select option{background:#1a1a1a}
+.form-group textarea{min-height:120px}
+.submit-btn{
+  width:100%;background:var(--red);border:none;color:#fff;
+  padding:16px;font-family:'Space Mono',monospace;
+  font-size:12px;letter-spacing:3px;text-transform:uppercase;
+  cursor:pointer;transition:all .3s;margin-top:8px;
+}
+.submit-btn:hover{background:#ff4d5a;box-shadow:0 0 30px var(--red-glow)}
+.submit-btn:disabled{opacity:.5;cursor:not-allowed}
+.success-msg{
+  text-align:center;padding:32px 20px;
+  color:#34d399;font-family:'Space Mono',monospace;
+  font-size:13px;letter-spacing:2px;line-height:2;display:none;
+}
+
+/* ADMIN PANEL */
+#adminPanel{
+  position:fixed;inset:0;z-index:300;
+  background:#0a0a0a;display:none;flex-direction:column;overflow-y:auto;
+}
+#adminPanel.active{display:flex}
+.admin-header{
+  background:#111;border-bottom:1px solid var(--border);
+  padding:20px 40px;display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:10;
+}
+.admin-logo{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:4px}
+.admin-logo span{color:var(--red)}
+.admin-email-tag{font-family:'Space Mono',monospace;font-size:11px;color:var(--muted)}
+.close-admin{
+  background:none;border:1px solid var(--border);color:var(--muted);
+  padding:8px 20px;font-family:'Space Mono',monospace;font-size:11px;
+  letter-spacing:2px;cursor:pointer;transition:all .3s;text-transform:uppercase;
+}
+.close-admin:hover{border-color:var(--red);color:var(--red)}
+.admin-body{padding:40px;flex:1}
+.admin-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:40px}
+.stat-card{background:#111;border:1px solid var(--border);padding:28px}
+.stat-num{font-family:'Bebas Neue',sans-serif;font-size:52px;color:var(--red);line-height:1;margin-bottom:6px}
+.stat-label{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase}
+.tickets-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+.tickets-title{font-family:'Bebas Neue',sans-serif;font-size:34px;letter-spacing:3px}
+.filter-tabs{display:flex;gap:8px}
+.filter-tab{
+  background:none;border:1px solid var(--border);color:var(--muted);
+  padding:7px 18px;font-family:'Space Mono',monospace;font-size:10px;
+  letter-spacing:2px;cursor:pointer;transition:all .2s;text-transform:uppercase;
+}
+.filter-tab.active{border-color:var(--red);color:var(--red)}
+.ticket-list{display:flex;flex-direction:column;gap:12px}
+.ticket-item{
+  background:#111;border:1px solid var(--border);
+  padding:20px 24px;display:grid;
+  grid-template-columns:auto 1fr auto auto;
+  gap:20px;align-items:center;transition:border-color .2s;
+}
+.ticket-item:hover{border-color:rgba(230,57,70,0.25)}
+.ticket-badge{
+  padding:4px 12px;font-family:'Space Mono',monospace;
+  font-size:10px;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;
+}
+.badge-support{background:rgba(59,130,246,0.12);color:#60a5fa;border:1px solid rgba(59,130,246,0.3)}
+.badge-partnership{background:rgba(230,57,70,0.12);color:var(--red);border:1px solid rgba(230,57,70,0.3)}
+.ticket-name{font-weight:600;font-size:15px;margin-bottom:3px}
+.ticket-preview{color:var(--muted);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:400px}
+.ticket-time{font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);white-space:nowrap}
+.ticket-action{
+  background:none;border:1px solid var(--border);color:var(--muted);
+  padding:6px 14px;font-family:'Space Mono',monospace;font-size:10px;
+  letter-spacing:1px;cursor:pointer;transition:all .2s;text-transform:uppercase;
+}
+.ticket-action:hover{border-color:var(--red);color:var(--red)}
+.ticket-action.closed-action{color:#444;border-color:#222;cursor:default}
+.empty-state{
+  text-align:center;padding:80px 20px;
+  color:var(--muted);font-family:'Space Mono',monospace;
+  font-size:13px;letter-spacing:2px;
+}
+
+/* LOGIN BOX */
+.admin-login{
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;min-height:100vh;padding:40px;
+  background:
+    linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);
+  background-size:60px 60px;
+  background-color:#0a0a0a;
+}
+.login-box{
+  background:#111;border:1px solid rgba(230,57,70,0.3);
+  padding:52px;width:100%;max-width:420px;position:relative;
+}
+.login-box::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--red),transparent);
+}
+.login-title{font-family:'Bebas Neue',sans-serif;font-size:38px;letter-spacing:4px;margin-bottom:6px}
+.login-sub{font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:2px;margin-bottom:36px}
+.login-error{
+  color:var(--red);font-family:'Space Mono',monospace;
+  font-size:11px;letter-spacing:1px;margin-bottom:16px;display:none;
+}
+
+/* FOOTER */
+footer{
+  position:relative;z-index:2;border-top:1px solid var(--border);
+  padding:40px 60px;display:flex;align-items:center;justify-content:space-between;
+  background:rgba(10,10,10,0.9);
+}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:4px}
+.footer-logo span{color:var(--red)}
+.footer-copy{font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:1px}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+.reveal{opacity:0;transform:translateY(30px);transition:all .7s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* GLITCH */
+.glitch{position:relative;display:inline-block}
+.glitch::before,.glitch::after{
+  content:attr(data-text);
+  position:absolute;top:0;left:0;width:100%;height:100%;
+  font-family:'Bebas Neue',sans-serif;
+}
+.glitch::before{
+  color:var(--red);
+  animation:glitch1 4s infinite;
+  clip-path:polygon(0 25%,100% 25%,100% 45%,0 45%);
+  opacity:.7;
+}
+.glitch::after{
+  color:#00bfff;
+  animation:glitch2 4s infinite;
+  clip-path:polygon(0 60%,100% 60%,100% 80%,0 80%);
+  opacity:.3;
+}
+@keyframes glitch1{
+  0%,88%,100%{transform:translateX(0)}
+  90%{transform:translateX(-5px)}
+  92%{transform:translateX(5px)}
+  94%{transform:translateX(-2px)}
+  96%{transform:translateX(0)}
+}
+@keyframes glitch2{
+  0%,88%,100%{transform:translateX(0)}
+  89%{transform:translateX(6px)}
+  91%{transform:translateX(-4px)}
+  93%{transform:translateX(3px)}
+  95%{transform:translateX(0)}
+}
+
+@media(max-width:768px){
+  nav{padding:16px 24px}
+  .cards{grid-template-columns:1fr}
+  section{padding:60px 24px}
+  footer{flex-direction:column;gap:16px;text-align:center;padding:32px 24px}
+  .admin-stats{grid-template-columns:1fr}
+  .admin-body{padding:20px}
+  .ticket-item{grid-template-columns:1fr;gap:8px}
+  .admin-header{padding:16px 20px}
+}
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+<div class="shapes">
+  <div class="shape"></div>
+  <div class="shape"></div>
+  <div class="shape"></div>
+  <div class="shape"></div>
+</div>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="logo">BYTE<span>FORGE</span></div>
+  <ul class="nav-links">
+    <li><a href="#hero">Home</a></li>
+    <li><a href="#contacts">Contacts</a></li>
+  </ul>
+  <button class="admin-btn" onclick="openAdmin()">&#9632; Admin</button>
+</nav>
+
+<main>
+  <!-- HERO -->
+  <section id="hero">
+    <h1 class="hero-title">
+      <span class="glitch" data-text="BYTEFORGE">BYTEFORGE</span>
+    </h1>
+    <p class="hero-sub">To contact me, you can click those buttons and mail me.</p>
+    <div class="hero-buttons">
+      <button class="btn-primary" onclick="openModal('support')">Get Support</button>
+      <button class="btn-secondary" onclick="openModal('partnership')">Partnership</button>
+    </div>
+  </section>
+
+  <!-- CONTACT SECTION -->
+  <section id="contact" style="text-align:center">
+    <div class="section-label reveal">// Contact</div>
+    <h2 class="section-title reveal">GET IN TOUCH</h2>
+    <div class="cards reveal">
+      <div class="card" onclick="openModal('support')">
+        <div class="card-icon">&#9889;</div>
+        <div class="card-title">Support</div>
+        <div class="card-desc">Having an issue or need technical assistance? Open a support ticket and we'll get back to you as soon as possible.</div>
+        <div class="card-arrow">&#8594;</div>
+      </div>
+      <div class="card" onclick="openModal('partnership')">
+        <div class="card-icon">&#9670;</div>
+        <div class="card-title">Partnership</div>
+        <div class="card-desc">Interested in working together or building something great? Let's discuss a potential partnership or collaboration.</div>
+        <div class="card-arrow">&#8594;</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<section id="contacts" style="text-align:center;padding-bottom:60px">
+  <div class="section-label reveal">// Contacts</div>
+  <h2 class="section-title reveal">REACH ME</h2>
+  <div class="reveal" style="display:flex;flex-direction:column;gap:16px;max-width:500px;margin:0 auto">
+    <div style="background:rgba(255,255,255,0.02);border:1px solid var(--border);padding:24px 32px;display:flex;align-items:center;gap:20px;transition:all .3s" onmouseover="this.style.borderColor='rgba(230,57,70,0.35)'" onmouseout="this.style.borderColor='var(--border)'">
+      <span style="font-size:26px">💬</span>
+      <div style="text-align:left">
+        <div style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--red);text-transform:uppercase;margin-bottom:4px">Discord</div>
+        <div style="font-size:17px;font-weight:600;letter-spacing:1px">j7j44</div>
+      </div>
+    </div>
+    <a href="https://github.com/r41ndev" target="_blank" style="text-decoration:none;color:inherit">
+      <div style="background:rgba(255,255,255,0.02);border:1px solid var(--border);padding:24px 32px;display:flex;align-items:center;gap:20px;transition:all .3s" onmouseover="this.style.borderColor='rgba(230,57,70,0.35)'" onmouseout="this.style.borderColor='var(--border)'">
+        <span style="font-size:26px">🐙</span>
+        <div style="text-align:left">
+          <div style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--red);text-transform:uppercase;margin-bottom:4px">GitHub</div>
+          <div style="font-size:17px;font-weight:600;letter-spacing:1px">r41ndev</div>
+        </div>
+      </div>
+    </a>
+    <a href="mailto:rxshdevelopments@gmail.com" style="text-decoration:none;color:inherit">
+      <div style="background:rgba(255,255,255,0.02);border:1px solid var(--border);padding:24px 32px;display:flex;align-items:center;gap:20px;transition:all .3s" onmouseover="this.style.borderColor='rgba(230,57,70,0.35)'" onmouseout="this.style.borderColor='var(--border)'">
+        <span style="font-size:26px">✉️</span>
+        <div style="text-align:left">
+          <div style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--red);text-transform:uppercase;margin-bottom:4px">Email</div>
+          <div style="font-size:17px;font-weight:600;letter-spacing:1px">rxshdevelopments@gmail.com</div>
+        </div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">BYTE<span>FORGE</span></div>
+  <div class="footer-copy">&copy; 2024 ByteForge &mdash; All rights reserved</div>
+</footer>
+
+<!-- ===== SUPPORT MODAL ===== -->
+<div class="modal-overlay" id="supportModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('supportModal')">&#10005;</button>
+    <div class="modal-type">// Support Ticket</div>
+    <div class="modal-title">SUPPORT</div>
+    <div id="supportForm">
+      <div class="form-group">
+        <label>Your Name</label>
+        <input type="text" id="s_name" placeholder="John Doe">
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="s_email" placeholder="you@example.com">
+      </div>
+      <div class="form-group">
+        <label>Subject</label>
+        <input type="text" id="s_subject" placeholder="Brief description of your issue">
+      </div>
+      <div class="form-group">
+        <label>Message</label>
+        <textarea id="s_message" placeholder="Describe your issue in detail..."></textarea>
+      </div>
+      <button class="submit-btn" id="s_btn" onclick="submitTicket('support')">Submit Ticket</button>
+    </div>
+    <div class="success-msg" id="s_success">
+      &#10003;&nbsp; Ticket submitted successfully.<br>We'll get back to you soon.
+    </div>
+  </div>
+</div>
+
+<!-- ===== PARTNERSHIP MODAL ===== -->
+<div class="modal-overlay" id="partnershipModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('partnershipModal')">&#10005;</button>
+    <div class="modal-type">// Partnership Inquiry</div>
+    <div class="modal-title">PARTNERSHIP</div>
+    <div id="partnershipForm">
+      <div class="form-group">
+        <label>Your Name / Company</label>
+        <input type="text" id="p_name" placeholder="Acme Inc.">
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="p_email" placeholder="you@company.com">
+      </div>
+      <div class="form-group">
+        <label>Partnership Type</label>
+        <select id="p_type">
+          <option value="">Select a type...</option>
+          <option>Co-development</option>
+          <option>Sponsorship</option>
+          <option>Affiliate</option>
+          <option>White-label</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Tell us about the opportunity</label>
+        <textarea id="p_message" placeholder="What would you like to build together?"></textarea>
+      </div>
+      <button class="submit-btn" id="p_btn" onclick="submitTicket('partnership')">Send Inquiry</button>
+    </div>
+    <div class="success-msg" id="p_success">
+      &#10003;&nbsp; Inquiry sent successfully.<br>We'll review it and reach out soon.
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADMIN PANEL ===== -->
+<div id="adminPanel">
+  <!-- LOGIN -->
+  <div class="admin-login" id="adminLogin">
+    <div class="login-box">
+      <div class="login-title">ADMIN ACCESS</div>
+      <div class="login-sub">// ByteForge Control Panel</div>
+      <div class="login-error" id="loginError">&#9888; Invalid credentials. Access denied.</div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="adminEmail" placeholder="rxshdevelopments@gmail.com">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="adminPass" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+      <button class="submit-btn" onclick="doLogin()">Enter Panel</button>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="adminDash" style="display:none;flex-direction:column;flex:1">
+    <div class="admin-header">
+      <div class="admin-logo">BYTE<span>FORGE</span>&nbsp;<span style="font-size:13px;color:var(--muted);letter-spacing:2px">// ADMIN</span></div>
+      <div class="admin-email-tag" id="adminEmailDisplay"></div>
+      <div style="display:flex;gap:12px">
+        <button class="close-admin" onclick="clearTickets()" style="color:#666;border-color:#222">Clear All</button>
+        <button class="close-admin" onclick="closeAdmin()">Exit Panel</button>
+      </div>
+    </div>
+    <div class="admin-body">
+      <div class="admin-stats">
+        <div class="stat-card">
+          <div class="stat-num" id="statTotal">0</div>
+          <div class="stat-label">Total Tickets</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="statSupport">0</div>
+          <div class="stat-label">Support</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="statPartner">0</div>
+          <div class="stat-label">Partnerships</div>
+        </div>
+      </div>
+      <div class="tickets-header">
+        <div class="tickets-title">TICKETS</div>
+        <div class="filter-tabs">
+          <button class="filter-tab active" onclick="filterTickets('all',this)">All</button>
+          <button class="filter-tab" onclick="filterTickets('support',this)">Support</button>
+          <button class="filter-tab" onclick="filterTickets('partnership',this)">Partnership</button>
+          <button class="filter-tab" onclick="filterTickets('open',this)">Open</button>
+          <button class="filter-tab" onclick="filterTickets('closed',this)">Closed</button>
+        </div>
+      </div>
+      <div class="ticket-list" id="ticketList"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ---- CONFIG ----
+const ADMIN_EMAIL = 'rxshdevelopments@gmail.com';
+const ADMIN_PASS  = 'ByteForge2024!'; // Change this to your own password!
+
+let currentFilter = 'all';
+
+// ---- STORAGE ----
+function getTickets(){
+  try{ return JSON.parse(localStorage.getItem('bf_tickets') || '[]') }
+  catch{ return [] }
+}
+function saveTickets(t){ localStorage.setItem('bf_tickets', JSON.stringify(t)) }
+
+// ---- MODAL ----
+function openModal(type){
+  const id = type === 'support' ? 'supportModal' : 'partnershipModal';
+  document.getElementById(id).classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(id){
+  document.getElementById(id).classList.remove('active');
+  document.body.style.overflow = '';
+}
+document.querySelectorAll('.modal-overlay').forEach(el => {
+  el.addEventListener('click', function(e){ if(e.target === this) closeModal(this.id); });
+});
+
+// ---- SUBMIT ----
+function submitTicket(type){
+  const isS = type === 'support';
+  const name    = document.getElementById(isS ? 's_name'    : 'p_name').value.trim();
+  const email   = document.getElementById(isS ? 's_email'   : 'p_email').value.trim();
+  const message = document.getElementById(isS ? 's_message' : 'p_message').value.trim();
+  const subject = isS
+    ? document.getElementById('s_subject').value.trim()
+    : document.getElementById('p_type').value;
+
+  if(!name || !email || !message){
+    alert('Please fill in all required fields.');return;
+  }
+  const btn = document.getElementById(isS ? 's_btn' : 'p_btn');
+  btn.disabled = true; btn.textContent = 'Sending...';
+
+  setTimeout(() => {
+    const tickets = getTickets();
+    tickets.unshift({
+      id: Date.now(), type, name, email,
+      subject: subject || 'No subject', message,
+      time: new Date().toLocaleString('en-GB'),
+      status: 'open'
+    });
+    saveTickets(tickets);
+
+    document.getElementById(isS ? 'supportForm' : 'partnershipForm').style.display = 'none';
+    document.getElementById(isS ? 's_success'   : 'p_success').style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = isS ? 'Submit Ticket' : 'Send Inquiry';
+
+    setTimeout(() => {
+      closeModal(isS ? 'supportModal' : 'partnershipModal');
+      document.getElementById(isS ? 'supportForm' : 'partnershipForm').style.display = '';
+      document.getElementById(isS ? 's_success'   : 'p_success').style.display = 'none';
+      ['s_name','s_email','s_subject','s_message','p_name','p_email','p_type','p_message']
+        .forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+    }, 2500);
+  }, 700);
+}
+
+// ---- ADMIN ----
+function openAdmin(){
+  document.getElementById('adminPanel').classList.add('active');
+  document.body.style.overflow = 'hidden';
+  document.getElementById('adminLogin').style.display = 'flex';
+  document.getElementById('adminDash').style.display = 'none';
+  document.getElementById('loginError').style.display = 'none';
+}
+function closeAdmin(){
+  document.getElementById('adminPanel').classList.remove('active');
+  document.body.style.overflow = '';
+  document.getElementById('adminEmail').value = '';
+  document.getElementById('adminPass').value  = '';
+}
+function doLogin(){
+  const email = document.getElementById('adminEmail').value.trim();
+  const pass  = document.getElementById('adminPass').value;
+  if(email === ADMIN_EMAIL && pass === ADMIN_PASS){
+    document.getElementById('adminLogin').style.display = 'none';
+    document.getElementById('adminDash').style.display  = 'flex';
+    document.getElementById('adminEmailDisplay').textContent = email;
+    renderTickets();
+  } else {
+    document.getElementById('loginError').style.display = 'block';
+  }
+}
+function renderTickets(){
+  const all = getTickets();
+  let filtered;
+  if(currentFilter === 'all')    filtered = all;
+  else if(currentFilter === 'open' || currentFilter === 'closed')
+    filtered = all.filter(t => t.status === currentFilter);
+  else filtered = all.filter(t => t.type === currentFilter);
+
+  document.getElementById('statTotal').textContent   = all.length;
+  document.getElementById('statSupport').textContent = all.filter(t => t.type==='support').length;
+  document.getElementById('statPartner').textContent = all.filter(t => t.type==='partnership').length;
+
+  const list = document.getElementById('ticketList');
+  if(!filtered.length){
+    list.innerHTML = '<div class="empty-state">// No tickets found</div>'; return;
+  }
+  list.innerHTML = filtered.map(t => `
+    <div class="ticket-item">
+      <span class="ticket-badge badge-${t.type}">${t.type}</span>
+      <div>
+        <div class="ticket-name">${esc(t.name)} <span style="color:var(--muted);font-size:12px;font-weight:400">&lt;${esc(t.email)}&gt;</span></div>
+        <div class="ticket-preview"><strong>${esc(t.subject)}</strong> — ${esc(t.message)}</div>
+      </div>
+      <div class="ticket-time">${t.time}</div>
+      <button class="ticket-action${t.status==='closed'?' closed-action':''}"
+        onclick="${t.status==='open'?`closeTicket(${t.id})`:'void(0)'}">
+        ${t.status==='closed'?'&#10003; Closed':'Close'}
+      </button>
+    </div>
+  `).join('');
+}
+function closeTicket(id){
+  const t = getTickets(); const item = t.find(x=>x.id===id);
+  if(item) item.status = 'closed';
+  saveTickets(t); renderTickets();
+}
+function clearTickets(){
+  if(confirm('Delete ALL tickets? This cannot be undone.')){
+    saveTickets([]); renderTickets();
+  }
+}
+function filterTickets(f, btn){
+  currentFilter = f;
+  document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTickets();
+}
+function esc(s){
+  const d = document.createElement('div'); d.textContent = s; return d.innerHTML;
+}
+
+// ---- SCROLL REVEAL ----
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: .15 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
